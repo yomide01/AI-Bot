@@ -1,5 +1,5 @@
 import express from 'express';
-import dotenv from 'dotenv';
+import * as dotenv from 'dotenv';
 import cors from 'cors';
 import { Configuration, OpenAIApi } from 'openai';
 
@@ -35,17 +35,17 @@ app.get('/', async (req, res) => {
 // Route for generating responses
 app.post('/', async (req, res) => {
   try {
-    const { prompt } = req.body;
+    const prompt = req.body.prompt;
 
     // Call OpenAI's API to generate a response
-    const response = await openai.completions.create({
-      model: "davinci-003",
+    const response = await openai.createCompletion({
+      model: "text-davinci-003",
       prompt: `${prompt}`,
       temperature: 0.5,
-      maxTokens: 4000,
-      topP: 1,
-      frequencyPenalty: 0.5,
-      presencePenalty: 0.5,
+      max_tokens: 4000,
+      top_p: 1,
+      frequency_penalty: 0.5,
+      presence_penalty: 0.5,
     });
 
     // Send the response back to the client
@@ -53,9 +53,9 @@ app.post('/', async (req, res) => {
     bot: response.data.choices[0].text
    })
 } catch (error) {
-    console.error(error);
+    console.log(error);
     res.status(500).send({ error })
 }
 })
 
-app.listen(10000, () => console.log('Server is running on http://localhost:10000'));
+app.listen(10000, ()  => console.log('Server is running on https://ai-bot-9qvm.onrender.com:10000'));
