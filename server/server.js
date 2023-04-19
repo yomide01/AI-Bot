@@ -1,12 +1,23 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import cors from 'cors';
-import { Configuration, OpenAIApi } from 'openai';
+const express = require('express');
+const dotenv = require('dotenv');
+const cors = require('cors');
+const { Configuration, OpenAIApi } = require('openai');
 
 dotenv.config();
 
+// Check if OPENAI_API_KEY is set in the environment
+if (!process.env.OPENAI_API_KEY) {
+  console.error('OPENAI_API_KEY not set in environment!');
+  process.exit(1);
+}
+
+const config = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+const openai = new OpenAIApi(config);
+
 const app = express();
-const PORT = process.env.PORT || 5000;
 
 // Allow CORS requests
 app.use(cors());
@@ -31,15 +42,15 @@ app.post('/', async (req, res) => {
       model: "text-davinci-003",
       prompt: `${prompt}`,
       temperature: 0.5,
-      max_tokens: 3000,
-      top_p: 1,
-      frequency_penalty: 0.5,
-      presence_penalty: 0.5,
+      maxTokens: 3000,
+      topP: 1,
+      frequencyPenalty: 0.5,
+      presencePenalty: 0.5,
     });
 
    // Send the response back to the client
    res.status(200).json({
-    bot: response.data.choices[0].text
+    bot: response.data.choices[0].text.trim()
   });
 } catch (error) {
   console.error(error);
@@ -47,14 +58,4 @@ app.post('/', async (req, res) => {
 }
 });
 
-const configureOpenAI = (apiKey) => {
-  const config = new Configuration({
-    apiKey,
-  });
-
-  return new OpenAIApi(config);
-};
-
-const openai = configureOpenAI(process.env.OPENAI_API_KEY);
-
-app.listen(PORT, () => console.log(`Server is running on http://localhost:${PORT}`));
+app.listen(5000, () => console.log('Server is running on http://localhost:5000'));
