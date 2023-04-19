@@ -49,19 +49,13 @@ app.post('/', async (req, res) => {
     });
 
     // Send the response back to the client
-    res.status(200).send({
-      bot: response.data.choices[0].text,
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send({ error: error.message });
-  }
-});
+   res.status(200).send({
+    bot: response.data.choices[0].text
+   })
+} catch (error) {
+    console.log(error);
+    res.status(500).send({ error })
+}
+})
 
-// Start the server
-const PORT = process.env.PORT || 5000;
-const URL = 'https://ai-bot-9qvm.onrender.com';
-app.listen(PORT, () =>
-  console.log(`Server is running on ${URL}:${PORT}`)
-);
-
+app.listen(5000, ()  => console.log('server is running on port http://localhost:5000'));
