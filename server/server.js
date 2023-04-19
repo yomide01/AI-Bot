@@ -48,14 +48,14 @@ app.post('/', async (req, res) => {
       presence_penalty: 0.5,
     });
 
-    // Send the response back to the client
-   res.status(200).send({
+   // Send the response back to the client
+   res.status(200).json({
     bot: response.data.choices[0].text
-   })
+  });
 } catch (error) {
-    console.log(error);
-    res.status(500).send({ error })
+  console.error(error);
+  res.status(500).json({ error: 'Internal Server Error' });
 }
-})
+});
 
-app.listen(5000, ()  => console.log('Server is running on https://localhost:5000'));
+app.listen(5000, () => console.log('Server is running on http://localhost:5000'));
