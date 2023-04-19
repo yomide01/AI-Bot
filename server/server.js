@@ -58,4 +58,4 @@ app.post('/', async (req, res) => {
 }
 })
 
-app.listen(10000, () => console.log('Server is running on https://ai-bot-9qvm.onrender.com:10000'));
+app.listen(10000, () => console.log('Server is running on http://localhost:10000'));
