@@ -1,23 +1,12 @@
 import express from 'express';
-import * as dotenv from 'dotenv';
+import dotenv from 'dotenv';
 import cors from 'cors';
 import { Configuration, OpenAIApi } from 'openai';
 
 dotenv.config();
 
-// Check if OPENAI_API_KEY is set in the environment
-if (!process.env.OPENAI_API_KEY) {
-  console.error('OPENAI_API_KEY not set in environment!');
-  process.exit(1);
-}
-
-const config = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-const openai = new OpenAIApi(config);
-
 const app = express();
+const PORT = process.env.PORT || 5000;
 
 // Allow CORS requests
 app.use(cors());
@@ -58,4 +47,14 @@ app.post('/', async (req, res) => {
 }
 });
 
-app.listen(5000, () => console.log('Server is running on http://localhost:5000'));
+const configureOpenAI = (apiKey) => {
+  const config = new Configuration({
+    apiKey,
+  });
+
+  return new OpenAIApi(config);
+};
+
+const openai = configureOpenAI(process.env.OPENAI_API_KEY);
+
+app.listen(PORT, () => console.log(`Server is running on http://localhost:${PORT}`));
